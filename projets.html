@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projets — Ethan_photographie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Expanded:wght@600;800&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0A0B0D; --ink-2:#151619; --paper:#F5F3EF; --paper-soft:#EDE9E1; --muted:#8B8A85;
+    --auto:#FF5A32; --portrait:#FF3D8A; --nature:#20E39E; --event:#7C6BFF;
+    --spectrum: linear-gradient(90deg, var(--auto), var(--portrait), var(--event), var(--nature));
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{background:var(--ink); color:var(--paper); font-family:'Inter', sans-serif; line-height:1.5; -webkit-font-smoothing:antialiased;}
+  h2,h3{font-family:'Archivo Expanded', sans-serif; letter-spacing:-0.01em;}
+  a{color:inherit; text-decoration:none;}
+  .mono{font-family:'Space Mono', monospace;}
+  .wrap{max-width:1200px; margin:0 auto; padding:0 36px;}
+
+  header{position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(10,11,13,0.96); backdrop-filter:blur(8px); border-bottom:1px solid rgba(245,243,239,0.1);}
+  nav{display:flex; align-items:center; justify-content:space-between; padding:28px 36px; max-width:1200px; margin:0 auto;}
+  .logo{font-family:'Archivo Expanded'; font-weight:800; font-size:1rem; letter-spacing:0.05em;}
+  .nav-links{display:flex; gap:44px; list-style:none; font-size:0.82rem; font-weight:600; letter-spacing:0.04em; text-transform:uppercase;}
+  .nav-links a{position:relative; padding:4px 0;}
+  .nav-links a::after{content:''; position:absolute; left:0; bottom:0; height:2px; width:0; background:var(--spectrum); transition:width .25s ease;}
+  .nav-links a:hover::after, .nav-links a.active::after{width:100%;}
+  .menu-toggle{display:none; background:none; border:none; font-size:1.4rem; color:var(--paper); cursor:pointer;}
+
+  .page-spacer{height:114px;}
+  section.page{padding:0 0 130px;}
+  .section-head{margin-bottom:56px;}
+  .section-head .num{font-family:'Space Mono'; font-size:0.85rem; color:var(--muted); display:block; margin-bottom:10px;}
+  .section-head h2{font-size:clamp(2.2rem,4.2vw,3.4rem); font-weight:800; text-transform:uppercase; margin-bottom:14px;}
+  .section-head p{color:var(--muted); max-width:460px; font-size:1rem;}
+
+  .project-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:4px;}
+  .tile{position:relative; aspect-ratio:4/5; overflow:hidden; cursor:pointer;}
+  .tile img{width:100%; height:100%; object-fit:cover; display:block; filter:brightness(0.88) saturate(0.95);
+    transition:transform .7s cubic-bezier(.2,.8,.2,1), filter .4s ease;}
+  .tile:hover img{transform:scale(1.07); filter:brightness(1) saturate(1.05);}
+  .tile .cat-bar{position:absolute; top:0; left:0; height:4px; width:100%; z-index:2;}
+  .tile .veil{position:absolute; inset:0; display:flex; flex-direction:column; justify-content:flex-end; padding:22px;
+    background:linear-gradient(180deg, rgba(10,11,13,0) 40%, rgba(10,11,13,0.88) 100%);}
+  .tile .p-num{font-family:'Space Mono'; font-size:0.7rem; color:var(--paper-soft); opacity:0.8; margin-bottom:6px;}
+  .tile h3{font-size:1.15rem; font-weight:600; text-transform:uppercase; margin-bottom:4px;}
+  .tile .p-cat{font-family:'Space Mono'; font-size:0.72rem; color:var(--paper-soft); opacity:0.85;}
+
+  footer{padding:34px 0; text-align:center; font-family:'Space Mono'; font-size:0.75rem; color:#55534E; background:var(--ink); border-top:1px solid rgba(245,243,239,0.08);}
+
+  @media (max-width:860px){
+    .nav-links{display:none;} .menu-toggle{display:block;}
+    .project-grid{grid-template-columns:repeat(2, 1fr);}
+  }
+  @media (max-width:560px){ .project-grid{grid-template-columns:1fr;} }
+  @media (prefers-reduced-motion: reduce){ *{transition:none !important;} }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="logo">ETHAN_PHOTOGRAPHIE</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Accueil</a></li>
+      <li><a href="projets.html" class="active">Projets</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <button class="menu-toggle">☰</button>
+  </nav>
+</header>
+
+<div class="page-spacer"></div>
+
+<section class="page">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="num mono">01 — Projets</span>
+      <h2>Chaque shooting, un univers</h2>
+      <p>Neuf reportages, quatre disciplines. Cliquez pour explorer chaque série en détail.</p>
+    </div>
+
+    <div class="project-grid">
+      <div class="tile">
+        <div class="cat-bar" style="background:var(--auto)"></div>
+        <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=900&auto=format&fit=crop" alt="Voiture de sport sur route de montagne">
+        <div class="veil"><span class="p-num mono">01</span><h3>Col des Estibes</h3><span class="p-cat">Voiture &amp; Moto</span></div>
+      </div>
+      <div class="tile">
+        <div class="cat-bar" style="background:var(--portrait)"></div>
+        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=900&auto=format&fit=crop" alt="Portrait en lumière naturelle">
+        <div class="veil"><span class="p-num mono">02</span><h3>Lumière d'atelier</h3><span class="p-cat">Portrait</span></div>
+      </div>
+      <div class="tile">
+        <div class="cat-bar" style="background:var(--nature)"></div>
+        <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=900&auto=format&fit=crop" alt="Paysage de montagne au lever du soleil">
+        <div class="veil"><span class="p-num mono">03</span><h3>Aube sur les crêtes</h3><span class="p-cat">Paysage &amp; Nature</span></div>
+      </div>
+      <div class="tile">
+        <div class="cat-bar" style="background:var(--event)"></div>
+        <img src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?q=80&w=900&auto=format&fit=crop" alt="Concert en soirée">
+        <div class="veil"><span class="p-num mono">04</span><h3>Nuit électrique</h3><span class="p-cat">Événementiel</span></div>
+      </div>
+      <div class="tile">
+        <div class="cat-bar" style="background:var(--nature)"></div>
+        <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=900&auto=format&fit=crop" alt="Forêt brumeuse">
+        <div class="veil"><span class="p-num mono">05</span><h3>Brume matinale</h3><span class="p-cat">Paysage &amp; Nature</span></div>
+      </div>
+      <div class="tile">
+        <div class="cat-bar" style="background:var(--auto)"></div>
+        <img src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=900&auto=format&fit=crop" alt="Moto garée au coucher du soleil">
+        <div class="veil"><span class="p-num mono">06</span><h3>Deux roues, un horizon</h3><span class="p-cat">Voiture &amp; Moto</span></div>
+      </div>
+      <div class="tile">
+        <div class="cat-bar" style="background:var(--portrait)"></div>
+        <img src="https://images.unsplash.com/photo-1500048993953-d23a436266cf?q=80&w=900&auto=format&fit=crop" alt="Portrait en extérieur">
+        <div class="veil"><span class="p-num mono">07</span><h3>Regard franc</h3><span class="p-cat">Portrait</span></div>
+      </div>
+      <div class="tile">
+        <div class="cat-bar" style="background:var(--event)"></div>
+        <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=900&auto=format&fit=crop" alt="Mariage en extérieur">
+        <div class="veil"><span class="p-num mono">08</span><h3>Premier bal</h3><span class="p-cat">Événementiel</span></div>
+      </div>
+      <div class="tile">
+        <div class="cat-bar" style="background:var(--auto)"></div>
+        <img src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?q=80&w=900&auto=format&fit=crop" alt="Détail moteur de voiture ancienne">
+        <div class="veil"><span class="p-num mono">09</span><h3>Mécanique brute</h3><span class="p-cat">Voiture &amp; Moto</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>© 2026 Ethan_photographie — Tous droits réservés</footer>
+
+</body>
+</html>
