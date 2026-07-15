@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projet — Ethan_photographie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Expanded:wght@600;800&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0A0B0D; --ink-2:#151619; --paper:#F5F3EF; --paper-soft:#EDE9E1; --muted:#8B8A85;
+    --auto:#FF5A32; --portrait:#FF3D8A; --nature:#20E39E; --event:#7C6BFF;
+    --spectrum: linear-gradient(90deg, var(--auto), var(--portrait), var(--event), var(--nature));
+    --accent: var(--auto);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{background:var(--ink); color:var(--paper); font-family:'Inter', sans-serif; line-height:1.5; -webkit-font-smoothing:antialiased;}
+  h1,h3{font-family:'Archivo Expanded', sans-serif; letter-spacing:-0.01em;}
+  a{color:inherit; text-decoration:none;}
+  .mono{font-family:'Space Mono', monospace;}
+  .wrap{max-width:900px; margin:0 auto; padding:0 36px;}
+
+  header{position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(10,11,13,0.96); backdrop-filter:blur(8px); border-bottom:1px solid rgba(245,243,239,0.1);}
+  nav{display:flex; align-items:center; justify-content:space-between; padding:28px 36px; max-width:1200px; margin:0 auto;}
+  .logo{font-family:'Archivo Expanded'; font-weight:800; font-size:1rem; letter-spacing:0.05em;}
+  .nav-links{display:flex; gap:44px; list-style:none; font-size:0.82rem; font-weight:600; letter-spacing:0.04em; text-transform:uppercase;}
+  .nav-links a{position:relative; padding:4px 0;}
+  .nav-links a::after{content:''; position:absolute; left:0; bottom:0; height:2px; width:0; background:var(--spectrum); transition:width .25s ease;}
+  .nav-links a:hover::after, .nav-links a.active::after{width:100%;}
+  .menu-toggle{display:none; background:none; border:none; font-size:1.4rem; color:var(--paper); cursor:pointer; position:relative; z-index:210;}
+
+  .mobile-nav{
+    position:fixed; inset:0; z-index:200; background:var(--ink);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:38px;
+    opacity:0; pointer-events:none; transition:opacity .3s ease;
+  }
+  .mobile-nav.open{opacity:1; pointer-events:auto;}
+  .mobile-nav a{font-family:'Archivo Expanded'; font-weight:700; font-size:1.7rem; text-transform:uppercase; letter-spacing:0.03em;}
+  .mobile-nav a:hover{color:var(--auto);}
+
+  .page-spacer{height:114px;}
+  section.page{padding:0 0 100px;}
+
+  .back-link{
+    display:inline-flex; align-items:center; gap:8px; font-family:'Space Mono'; font-size:0.8rem;
+    color:var(--muted); margin-bottom:34px; transition:color .2s ease;
+  }
+  .back-link:hover{color:var(--paper);}
+
+  .proj-head{margin-bottom:48px;}
+  .proj-cat{
+    display:inline-flex; align-items:center; gap:8px; font-family:'Space Mono'; font-size:0.8rem;
+    text-transform:uppercase; letter-spacing:0.05em; color:var(--paper-soft); margin-bottom:16px;
+  }
+  .proj-cat .sw{width:8px; height:8px; border-radius:50%; background:var(--accent);}
+  .proj-head h1{font-size:clamp(2.2rem,5.4vw,3.6rem); font-weight:800; text-transform:uppercase; margin-bottom:22px;}
+  .proj-desc{color:var(--paper-soft); font-size:1.05rem; max-width:640px;}
+
+  /* Stack vertical, une grande photo pleine largeur à la fois */
+  .stack{display:flex; flex-direction:column; gap:26px; margin-top:56px;}
+  .s-item{width:100%; overflow:hidden; border-radius:2px; cursor:zoom-in; background:var(--ink-2);}
+  .s-item img{width:100%; height:auto; display:block; transition:transform .5s ease;}
+  .s-item:hover img{transform:scale(1.015);}
+
+  .empty-state{
+    padding:60px 0; color:var(--muted); font-family:'Space Mono'; font-size:0.9rem;
+    border:1px dashed rgba(245,243,239,0.2); border-radius:4px; text-align:center; margin-top:56px;
+  }
+
+  /* Navigation précédent / suivant */
+  .proj-nav{
+    display:flex; justify-content:space-between; align-items:center; gap:20px;
+    margin-top:90px; padding-top:36px; border-top:1px solid rgba(245,243,239,0.1);
+    font-family:'Space Mono'; font-size:0.8rem; text-transform:uppercase; letter-spacing:0.05em;
+  }
+  .proj-nav a{color:var(--muted); transition:color .2s ease;}
+  .proj-nav a:hover{color:var(--paper);}
+  .proj-nav .all-link{color:var(--paper); font-weight:700;}
+
+  /* Vous pourriez aussi aimer */
+  .related{margin-top:90px;}
+  .related h2{font-size:1rem; text-transform:uppercase; letter-spacing:0.05em; font-family:'Space Mono'; color:var(--muted); margin-bottom:28px;}
+  .related-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:16px;}
+  .r-item{display:block;}
+  .r-media{width:100%; aspect-ratio:4/5; overflow:hidden; border-radius:2px; background:var(--ink-2);}
+  .r-media img{width:100%; height:100%; object-fit:cover; display:block; filter:brightness(0.9); transition:transform .5s ease, filter .3s ease;}
+  .r-item:hover .r-media img{transform:scale(1.06); filter:brightness(1);}
+  .r-item h3{font-size:0.9rem; font-weight:600; text-transform:uppercase; margin-top:12px;}
+
+  /* Visionneuse plein écran (photo en pleine qualité) */
+  .lightbox{
+    position:fixed; inset:0; z-index:300; background:rgba(10,11,13,0.97);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none; transition:opacity .25s ease;
+  }
+  .lightbox.active{opacity:1; pointer-events:auto;}
+  .lightbox img{max-width:88vw; max-height:84vh; object-fit:contain; border-radius:2px; box-shadow:0 30px 80px rgba(0,0,0,0.6);}
+  .lb-close, .lb-prev, .lb-next{
+    position:absolute; background:none; border:none; color:var(--paper); cursor:pointer;
+    font-family:'Space Mono'; font-size:1.6rem; padding:14px; opacity:0.75; transition:opacity .2s ease;
+  }
+  .lb-close:hover, .lb-prev:hover, .lb-next:hover{opacity:1;}
+  .lb-close{top:20px; right:24px;}
+  .lb-prev{left:10px; top:50%; transform:translateY(-50%); font-size:2.2rem;}
+  .lb-next{right:10px; top:50%; transform:translateY(-50%); font-size:2.2rem;}
+  .lb-count{position:absolute; bottom:24px; left:50%; transform:translateX(-50%); font-family:'Space Mono'; font-size:0.78rem; color:var(--paper-soft); opacity:0.75;}
+  .lb-loading{position:absolute; font-family:'Space Mono'; font-size:0.75rem; color:var(--paper-soft); opacity:0.6;}
+
+  footer{padding:34px 0; text-align:center; font-family:'Space Mono'; font-size:0.75rem; color:#55534E; background:var(--ink); border-top:1px solid rgba(245,243,239,0.08);}
+
+  @media (max-width:860px){
+    .nav-links{display:none;} .menu-toggle{display:block;}
+    .related-grid{grid-template-columns:repeat(3, 1fr); gap:8px;}
+  }
+  @media (max-width:560px){ .related-grid{grid-template-columns:repeat(3, 1fr);} }
+  @media (prefers-reduced-motion: reduce){ *{transition:none !important;} }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="logo">ETHAN_PHOTOGRAPHIE</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Accueil</a></li>
+      <li><a href="projets.html" class="active">Projets</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <button class="menu-toggle" id="menuToggle">☰</button>
+  </nav>
+</header>
+
+<div class="mobile-nav" id="mobileNav">
+  <a href="index.html">Accueil</a>
+  <a href="projets.html">Projets</a>
+  <a href="contact.html">Contact</a>
+</div>
+
+<div class="page-spacer"></div>
+
+<section class="page">
+  <div class="wrap">
+    <a href="projets.html" class="back-link">← Tous les projets</a>
+
+    <div class="proj-head">
+      <span class="proj-cat"><span class="sw" id="projSwatch"></span><span id="projCat"></span></span>
+      <h1 id="projTitle">Chargement…</h1>
+      <p class="proj-desc" id="projDesc"></p>
+    </div>
+
+    <div id="stack" class="stack"></div>
+    <div id="emptyState" class="empty-state" style="display:none;">
+      Aucune photo trouvée pour ce projet pour l'instant.<br>
+      Ajoutez vos images dans <code class="mono" id="emptyPath"></code>.
+    </div>
+
+    <div class="proj-nav">
+      <a href="#" id="navPrev">← Précédent</a>
+      <a href="projets.html" class="all-link">Tous les projets</a>
+      <a href="#" id="navNext">Suivant →</a>
+    </div>
+
+    <div class="related">
+      <h2>Vous pourriez aussi aimer</h2>
+      <div class="related-grid" id="relatedGrid"></div>
+    </div>
+  </div>
+</section>
+
+<footer>© 2026 Ethan_photographie — Tous droits réservés</footer>
+
+<!-- Visionneuse plein écran -->
+<div class="lightbox" id="lightbox">
+  <button class="lb-close" id="lbClose">✕</button>
+  <button class="lb-prev" id="lbPrev">‹</button>
+  <img id="lbImg" src="" alt="">
+  <button class="lb-next" id="lbNext">›</button>
+  <span class="lb-count" id="lbCount"></span>
+</div>
+
+<script>
+  // ===== Données des projets — à synchroniser avec projets.html =====
+  // Pour ajouter un nouveau projet : ajoutez une entrée ici + dans PROJECT_ORDER,
+  // même slug que dans le lien (?p=slug), puis déposez ses photos dans :
+  //   images/projets/<slug>/thumbs/1.jpg, 2.jpg, ...  → aperçus légers (compressés, ~1000px)
+  //   images/projets/<slug>/1.jpg, 2.jpg, ...          → photos pleine qualité (ouvertes au clic)
+  const PROJECT_ORDER = ['vignette 1','vignette 2','vignette 3','vignette 4','vignette 5','vignette 6','vignette 7','vignette 8','vignette 9'];
+  const PROJECTS = {
+    'vignette 1': { title: 'Rallye du Pyla 2026',      cat: 'Voiture & Moto',     color: 'var(--auto)',
+      desc: "Une journée au cœur du Rallye du Pyla 2026, entre lignes de départ tendues et sorties de virage à pleine vitesse." },
+    'vignette 2': { title: "Lumière d'atelier",        cat: 'Portrait',           color: 'var(--portrait)',
+      desc: "Une série de portraits en studio, tournée autour d'une seule source de lumière naturelle." },
+    'vignette 3': { title: 'Aube sur les crêtes',      cat: 'Paysage & Nature',   color: 'var(--nature)',
+      desc: "Trois levers de soleil en montagne pour capturer cette lumière rasante qui ne dure que quelques minutes." },
+    'vignette 4': { title: 'Nuit électrique',          cat: 'Événementiel',       color: 'var(--event)',
+      desc: "Ambiance de concert, jeux de lumière et énergie de la foule, capturés au plus près de la scène." },
+    'vignette 5': { title: 'Brume matinale',           cat: 'Paysage & Nature',   color: 'var(--nature)',
+      desc: "Une forêt silencieuse, enveloppée de brume, photographiée aux premières heures du jour." },
+    'vignette 6': { title: 'Deux roues, un horizon',   cat: 'Voiture & Moto',     color: 'var(--auto)',
+      desc: "Road-trip à moto le long de la côte, entre lumière du soir et routes désertes." },
+    'vignette 7': { title: 'Regard franc',             cat: 'Portrait',           color: 'var(--portrait)',
+      desc: "Une série de portraits en extérieur, à la recherche d'expressions sincères et sans artifice." },
+    'vignette 8': { title: 'Premier bal',              cat: 'Événementiel',       color: 'var(--event)',
+      desc: "Un mariage couvert du matin au soir, avec une attention particulière portée aux instants spontanés." },
+    'vignette 9': { title: 'Mécanique brute',          cat: 'Voiture & Moto',     color: 'var(--auto)',
+      desc: "Gros plans sur la mécanique d'une voiture de collection, entre reflets et textures brutes." },
+  };
+  const MAX_PHOTOS = 30; // nombre maximum de photos testées par projet
+
+  const slug = new URLSearchParams(location.search).get('p');
+  const data = PROJECTS[slug];
+
+  const titleEl = document.getElementById('projTitle');
+  const catEl = document.getElementById('projCat');
+  const descEl = document.getElementById('projDesc');
+  const swatchEl = document.getElementById('projSwatch');
+  const stackEl = document.getElementById('stack');
+  const emptyEl = document.getElementById('emptyState');
+  const emptyPathEl = document.getElementById('emptyPath');
+  const navPrev = document.getElementById('navPrev');
+  const navNext = document.getElementById('navNext');
+  const relatedGrid = document.getElementById('relatedGrid');
+
+  let fullImages = []; // photos pleine qualité, remplies une fois les aperçus chargés
+
+  if (!data) {
+    titleEl.textContent = 'Projet introuvable';
+    catEl.textContent = '';
+    document.querySelector('.proj-nav').style.display = 'none';
+    document.querySelector('.related').style.display = 'none';
+  } else {
+    titleEl.textContent = data.title;
+    catEl.textContent = data.cat;
+    descEl.textContent = data.desc;
+    swatchEl.style.background = data.color;
+    document.documentElement.style.setProperty('--accent', data.color);
+    document.title = data.title + ' — Ethan_photographie';
+    emptyPathEl.textContent = `images/projets/${slug}/thumbs/`;
+
+    // Navigation précédent / suivant, en boucle sur l'ordre des projets
+    const idx = PROJECT_ORDER.indexOf(slug);
+    const prevSlug = PROJECT_ORDER[(idx - 1 + PROJECT_ORDER.length) % PROJECT_ORDER.length];
+    const nextSlug = PROJECT_ORDER[(idx + 1) % PROJECT_ORDER.length];
+    navPrev.href = `projet.html?p=${encodeURIComponent(prevSlug)}`;
+    navPrev.textContent = `← ${PROJECTS[prevSlug].title}`;
+    navNext.href = `projet.html?p=${encodeURIComponent(nextSlug)}`;
+    navNext.textContent = `${PROJECTS[nextSlug].title} →`;
+
+    // Vous pourriez aussi aimer : les 3 projets suivants dans l'ordre
+    for (let i = 1; i <= 3; i++) {
+      const rSlug = PROJECT_ORDER[(idx + i) % PROJECT_ORDER.length];
+      const rData = PROJECTS[rSlug];
+      const rEncoded = encodeURIComponent(rSlug);
+      const rEl = document.createElement('a');
+      rEl.className = 'r-item';
+      rEl.href = `projet.html?p=${rEncoded}`;
+      rEl.innerHTML = `
+        <div class="r-media"><img src="images/projets/${rEncoded}/thumbs/1.jpg" loading="lazy" decoding="async" alt="${rData.title}" onerror="this.onerror=null; this.src='images/projets/${rEncoded}/1.jpg';"></div>
+        <h3>${rData.title}</h3>`;
+      relatedGrid.appendChild(rEl);
+    }
+
+    // On teste d'abord l'aperçu léger (thumbs/), et si celui-ci n'existe pas encore,
+    // on utilise directement la photo pleine qualité comme aperçu (aucune action requise).
+    const encodedSlug = encodeURIComponent(slug);
+    const candidates = Array.from({ length: MAX_PHOTOS }, (_, i) => ({
+      thumb: `images/projets/${encodedSlug}/thumbs/${i + 1}.jpg`,
+      full: `images/projets/${encodedSlug}/${i + 1}.jpg`,
+    }));
+    function probe(src) {
+      return new Promise(resolve => {
+        const img = new Image();
+        img.onload = () => resolve(src);
+        img.onerror = () => resolve(null);
+        img.src = src;
+      });
+    }
+    Promise.all(candidates.map(async c => {
+      const thumbOk = await probe(c.thumb);
+      if (thumbOk) return { thumb: thumbOk, full: c.full };
+      const fullOk = await probe(c.full);
+      if (fullOk) return { thumb: fullOk, full: fullOk };
+      return null;
+    })).then(results => {
+      const valid = results.filter(Boolean);
+      if (valid.length === 0) {
+        emptyEl.style.display = 'block';
+        return;
+      }
+      fullImages = valid.map(v => v.full);
+      valid.forEach((c, i) => {
+        const item = document.createElement('div');
+        item.className = 's-item';
+        item.innerHTML = `<img src="${c.thumb}" loading="lazy" decoding="async" alt="${data.title} — photo ${i + 1}">`;
+        item.addEventListener('click', () => openLightbox(i));
+        stackEl.appendChild(item);
+      });
+    });
+  }
+
+  // ===== Visionneuse plein écran (charge la version pleine qualité) =====
+  const lightbox = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lbImg');
+  const lbCount = document.getElementById('lbCount');
+  let currentIndex = 0;
+
+  function openLightbox(index) {
+    currentIndex = index;
+    updateLightbox();
+    lightbox.classList.add('active');
+  }
+  function updateLightbox() {
+    lbImg.src = fullImages[currentIndex];
+    lbCount.textContent = `${currentIndex + 1} / ${fullImages.length}`;
+  }
+  function closeLightbox() { lightbox.classList.remove('active'); }
+  function nextImage() { currentIndex = (currentIndex + 1) % fullImages.length; updateLightbox(); }
+  function prevImage() { currentIndex = (currentIndex - 1 + fullImages.length) % fullImages.length; updateLightbox(); }
+
+  document.getElementById('lbClose').addEventListener('click', closeLightbox);
+  document.getElementById('lbNext').addEventListener('click', nextImage);
+  document.getElementById('lbPrev').addEventListener('click', prevImage);
+  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox.classList.contains('active')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowRight') nextImage();
+    if (e.key === 'ArrowLeft') prevImage();
+  });
+
+  // Menu mobile
+  const menuToggle = document.getElementById('menuToggle');
+  const mobileNav = document.getElementById('mobileNav');
+  menuToggle.addEventListener('click', () => {
+    const open = mobileNav.classList.toggle('open');
+    menuToggle.textContent = open ? '✕' : '☰';
+  });
+  mobileNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    mobileNav.classList.remove('open');
+    menuToggle.textContent = '☰';
+  }));
+</script>
+
+</body>
+</html>
