@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — Ethan_photographie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Caveat:wght@600;700&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F4F1E8; --paper-2:#EAE4D3; --ink:#16130F; --ink-soft:#5C574A;
+    --red:#D62828;
+    --auto:#C1531F; --portrait:#A13358; --nature:#2F7A52; --event:#4A3FC4;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{background:var(--paper); color:var(--ink); font-family:'Inter', sans-serif; line-height:1.5; -webkit-font-smoothing:antialiased;}
+  h1{font-family:'Archivo Black', sans-serif;}
+  a{color:inherit; text-decoration:none;}
+  .mono{font-family:'Space Mono', monospace;}
+  .marker{font-family:'Caveat', cursive;}
+  ::selection{background:var(--red); color:#fff;}
+  .wrap{max-width:1100px; margin:0 auto; padding:0 36px;}
+
+  .sprockets{position:fixed; top:0; left:0; right:0; height:14px; z-index:110; display:flex; gap:18px; align-items:center; padding:0 18px; background:var(--ink);}
+  .sprockets span{width:7px; height:7px; border-radius:1px; background:var(--paper); opacity:0.5; flex-shrink:0;}
+
+  header{position:fixed; top:14px; left:0; right:0; z-index:100; background:rgba(244,241,232,0.94); backdrop-filter:blur(6px); border-bottom:1px solid rgba(22,19,15,0.1);}
+  nav{display:flex; align-items:center; justify-content:space-between; padding:22px 36px; max-width:1200px; margin:0 auto;}
+  .logo{font-family:'Archivo Black'; font-size:0.95rem; letter-spacing:0.02em;}
+  .nav-links{display:flex; gap:40px; list-style:none; font-size:0.8rem; font-weight:600; letter-spacing:0.05em; text-transform:uppercase;}
+  .nav-links a{position:relative;}
+  .nav-links a::after{content:''; position:absolute; left:0; bottom:-4px; height:2px; width:0; background:var(--red); transition:width .25s ease;}
+  .nav-links a:hover::after, .nav-links a.active::after{width:100%;}
+  .menu-toggle{display:none; background:none; border:none; font-size:1.4rem; color:var(--ink); cursor:pointer; position:relative; z-index:210;}
+
+  .mobile-nav{
+    position:fixed; inset:0; z-index:200; background:var(--ink);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:34px;
+    opacity:0; pointer-events:none; transition:opacity .3s ease;
+  }
+  .mobile-nav.open{opacity:1; pointer-events:auto;}
+  .mobile-nav a{font-family:'Archivo Black'; font-size:1.5rem; text-transform:uppercase; color:var(--paper);}
+  .mobile-nav a:hover{color:var(--red);}
+
+  .page-spacer{height:110px;}
+  .intro{padding:0 0 50px;}
+  .intro .eyebrow{font-family:'Space Mono'; font-size:0.78rem; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:10px;}
+  .intro h1{font-size:clamp(2.2rem,4.6vw,3.6rem); text-transform:uppercase; margin-bottom:10px;}
+  .intro .note{font-family:'Caveat'; font-weight:700; font-size:1.4rem; color:var(--red); transform:rotate(-1.5deg); display:inline-block;}
+
+  /* Carte façon dos de photo / carte postale */
+  .postcard{
+    position:relative; border:1.5px solid rgba(22,19,15,0.7); border-radius:3px;
+    background:
+      repeating-linear-gradient(to bottom, transparent 0 41px, rgba(22,19,15,0.07) 41px 42px),
+      var(--paper);
+    padding:46px 46px 54px;
+    margin-bottom:90px;
+    display:grid; grid-template-columns:1fr 1px 1fr; gap:0;
+  }
+  .postcard .divider{background:repeating-linear-gradient(to bottom, rgba(22,19,15,0.35) 0 6px, transparent 6px 12px);}
+  .pc-left{padding-right:44px;}
+  .pc-right{padding-left:44px; position:relative;}
+
+  .stamp{
+    position:absolute; top:-18px; right:-14px; width:96px; height:118px;
+    border:2px dashed rgba(22,19,15,0.55); border-radius:2px;
+    display:flex; align-items:center; justify-content:center; background:var(--paper-2);
+    transform:rotate(4deg);
+  }
+
+  .field{margin-bottom:30px;}
+  .field .label{font-family:'Space Mono'; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--ink-soft); display:block; margin-bottom:6px;}
+  .field .value{font-family:'Archivo Black'; font-size:1.25rem; text-transform:uppercase;}
+  .field a.value:hover{color:var(--red);}
+  .field .value.small{font-family:'Inter'; font-weight:600; font-size:1.02rem; text-transform:none;}
+
+  .note-hand{font-family:'Caveat'; font-weight:600; font-size:1.7rem; line-height:1.35; color:var(--ink); margin-bottom:30px; transform:rotate(-0.6deg);}
+
+  .social-stack{display:flex; flex-direction:column; gap:10px; margin-top:6px;}
+  .social-stack a{
+    font-family:'Space Mono'; font-size:0.85rem; text-transform:uppercase; letter-spacing:0.04em;
+    display:inline-flex; align-items:center; gap:10px;
+  }
+  .social-stack a::before{content:'—'; color:var(--red);}
+  .social-stack a:hover{color:var(--red);}
+
+  .stamps-row{display:flex; gap:22px; margin-top:34px; flex-wrap:wrap;}
+  .ink-stamp{
+    width:74px; height:74px; border:2px solid var(--ink); border-radius:6px;
+    display:flex; align-items:center; justify-content:center; opacity:0.85;
+  }
+  .ink-stamp:nth-child(1){transform:rotate(-6deg);}
+  .ink-stamp:nth-child(2){transform:rotate(4deg);}
+  .ink-stamp:nth-child(3){transform:rotate(-3deg);}
+
+  footer{padding:30px 0; text-align:center; font-family:'Space Mono'; font-size:0.72rem; color:var(--ink-soft); border-top:1px solid rgba(22,19,15,0.12);}
+
+  @media (max-width:760px){
+    .nav-links{display:none;} .menu-toggle{display:block;}
+    .postcard{grid-template-columns:1fr; padding:36px 26px;}
+    .postcard .divider{display:none;}
+    .pc-left{padding-right:0; padding-bottom:36px; border-bottom:1.5px dashed rgba(22,19,15,0.3); margin-bottom:36px;}
+    .pc-right{padding-left:0;}
+    .stamp{top:-18px; right:0;}
+  }
+  @media (prefers-reduced-motion: reduce){ *{transition:none !important;} }
+</style>
+</head>
+<body>
+
+<div class="sprockets">
+  <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+</div>
+
+<header>
+  <nav>
+    <div class="logo">ETHAN_PHOTOGRAPHIE</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Accueil</a></li>
+      <li><a href="projets.html">Projets</a></li>
+      <li><a href="contact.html" class="active">Contact</a></li>
+    </ul>
+    <button class="menu-toggle" id="menuToggle">☰</button>
+  </nav>
+</header>
+
+<div class="mobile-nav" id="mobileNav">
+  <a href="index.html">Accueil</a>
+  <a href="projets.html">Projets</a>
+  <a href="contact.html">Contact</a>
+</div>
+
+<div class="page-spacer"></div>
+
+<div class="wrap">
+  <div class="intro">
+    <div class="eyebrow mono">Verso</div>
+    <h1>Contact</h1>
+    <div class="note">— comme au dos d'un tirage, tout ce qu'il faut pour m'écrire</div>
+  </div>
+
+  <div class="postcard">
+    <div class="stamp">
+      <svg width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="4" y="14" width="38" height="22" rx="3" stroke="#16130F" stroke-width="2"/>
+        <path d="M15 14 L19 6 H27 L31 14" stroke="#16130F" stroke-width="2" stroke-linejoin="round"/>
+        <circle cx="23" cy="25" r="8" stroke="#D62828" stroke-width="2"/>
+      </svg>
+    </div>
+
+    <div class="pc-left">
+      <div class="field">
+        <span class="label">E-mail</span>
+        <a href="mailto:bonjour@ethanphotographie.fr" class="value">bonjour@ethanphotographie.fr</a>
+      </div>
+      <div class="field">
+        <span class="label">Téléphone</span>
+        <a href="tel:+33600000000" class="value small">+33 6 00 00 00 00</a>
+      </div>
+      <div class="field">
+        <span class="label">Zone géographique</span>
+        <span class="value small">Bordeaux &amp; Nouvelle-Aquitaine — déplacements possibles partout en France</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="pc-right">
+      <p class="note-hand">Une idée de shooting, une question, une envie de collaborer ? Écrivez-moi, je réponds toujours sous 48h.</p>
+
+      <div class="social-stack">
+        <a href="#">Instagram</a>
+        <a href="#">Behance</a>
+        <a href="#">LinkedIn</a>
+      </div>
+
+      <div class="stamps-row">
+        <div class="ink-stamp">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="20" r="13" stroke="#C1531F" stroke-width="1.6"/>
+            <g stroke="#C1531F" stroke-width="1.6" stroke-linecap="round">
+              <path d="M20 8 L23 17 L33 15"/>
+              <path d="M30 12 L24 20 L28 30"/>
+              <path d="M25 31 L18 29 L14 37"/>
+              <path d="M10 33 L15 24 L7 19"/>
+            </g>
+          </svg>
+        </div>
+        <div class="ink-stamp">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="12" width="32" height="16" rx="2" stroke="#A13358" stroke-width="1.6"/>
+            <circle cx="20" cy="20" r="5" stroke="#A13358" stroke-width="1.6"/>
+            <rect x="8" y="15" width="3" height="3" fill="#A13358"/>
+            <rect x="29" y="15" width="3" height="3" fill="#A13358"/>
+          </svg>
+        </div>
+        <div class="ink-stamp">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 10 L20 26 L31 10" stroke="#2F7A52" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M9 30 L15 18 L21 30 L27 16 L31 30" stroke="#2F7A52" stroke-width="1.6" fill="none" stroke-linecap="round" opacity="0.6"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>© 2026 Ethan_photographie — Tous droits réservés</footer>
+
+<script>
+  const menuToggle = document.getElementById('menuToggle');
+  const mobileNav = document.getElementById('mobileNav');
+  menuToggle.addEventListener('click', () => {
+    const open = mobileNav.classList.toggle('open');
+    menuToggle.textContent = open ? '✕' : '☰';
+  });
+  mobileNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    mobileNav.classList.remove('open');
+    menuToggle.textContent = '☰';
+  }));
+</script>
+
+</body>
+</html>
