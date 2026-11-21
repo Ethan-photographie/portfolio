@@ -44,8 +44,8 @@
 
   .hero{
     position:relative; height:100vh; width:100%;
-    /* Photo de fond : images/background.jpg — format paysage, haute résolution (min. 1920px) recommandé */
-    background:url('images/background.jpg') center / cover no-repeat;
+    /* Photo de fond : images/background.jpg (original) → images/background.webp (version web, générée par outils/optimiser_images.py) */
+    background:url('images/background.webp') center / cover no-repeat;
   }
   .hero::before{content:''; position:absolute; inset:0; background:linear-gradient(0deg, rgba(22,19,15,0.92) 0%, rgba(22,19,15,0.25) 40%, rgba(22,19,15,0.55) 100%);}
   .hero-content{position:absolute; left:0; right:0; bottom:0; z-index:1; padding:0 36px 76px; max-width:1200px; margin:0 auto;}

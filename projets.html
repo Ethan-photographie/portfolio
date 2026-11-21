@@ -203,41 +203,46 @@
 
 <script>
   // ===== Données des projets =====
-  // Pour ajouter un projet : nouvelle entrée ici, même slug que le nom du dossier,
-  // puis déposez ses photos dans images/projets/<slug>/1.jpg, 2.jpg, ...
-  // (facultatif : images/projets/<slug>/thumbs/1.jpg... pour des aperçus plus légers)
+  // Pour ajouter un projet : nouvelle entrée ici (clé = nom du dossier, id = fin de l'adresse
+  // de la galerie, sans espaces ni accents), déposez ses photos dans images/projets/<dossier>/1.jpg, 2.jpg, ...
+  // puis lancez : python3 outils/optimiser_images.py
+  // (le script crée les versions légères et met à jour images/photos.json)
   const PROJECT_ORDER = ['vignette 1','vignette 2','vignette 3','vignette 4','vignette 5','vignette 6','vignette 7','vignette 8','vignette 9'];
   const PROJECTS = {
-    'vignette 1': { title: 'Rallye du Pyla 2026',      cat: 'Voiture & Moto',     color: 'var(--auto)' },
-    'vignette 2': { title: "Shooting",        cat: 'Voiture & Portrait',           color: 'var(--portrait)' },
-    'vignette 3': { title: '4L Trophy 2026',      cat: 'Voiture',   color: 'var(--auto)' },
-    'vignette 4': { title: 'KMC Auto Prestige Event',          cat: 'Voiture & Événementiel',       color: 'var(--event)' },
-    'vignette 5': { title: 'Ferrari Palau Bordeaux',           cat: 'Voiture',   color: 'var(--auto)' },
-    'vignette 6': { title: 'BMW Mérignac',   cat: 'Voiture & Moto',     color: 'var(--auto)' },
-    'vignette 7': { title: "Les Calandres d'Antan de Gradignan",             cat: 'Voiture',           color: 'var(--auto)' },
-    'vignette 8': { title: 'Coming Soon',              cat: 'Événementiel',       color: 'var(--event)' },
-    'vignette 9': { title: 'Coming Soon',          cat: 'Voiture & Moto',     color: 'var(--auto)' },
+    'vignette 1': { id: 'rallye-du-pyla-2026',         title: 'Rallye du Pyla 2026',                 cat: 'Voiture & Moto',          color: 'var(--auto)' },
+    'vignette 2': { id: 'shooting',                    title: "Shooting",                            cat: 'Voiture & Portrait',      color: 'var(--portrait)' },
+    'vignette 3': { id: '4l-trophy-2026',              title: '4L Trophy 2026',                      cat: 'Voiture',                 color: 'var(--auto)' },
+    'vignette 4': { id: 'kmc-auto-prestige-event',     title: 'KMC Auto Prestige Event',             cat: 'Voiture & Événementiel',  color: 'var(--event)' },
+    'vignette 5': { id: 'ferrari-palau-bordeaux',      title: 'Ferrari Palau Bordeaux',              cat: 'Voiture',                 color: 'var(--auto)' },
+    'vignette 6': { id: 'bmw-merignac',                title: 'BMW Mérignac',                        cat: 'Voiture & Moto',          color: 'var(--auto)' },
+    'vignette 7': { id: 'calandres-d-antan-gradignan', title: "Les Calandres d'Antan de Gradignan",  cat: 'Voiture',                 color: 'var(--auto)' },
+    'vignette 8': { id: 'bientot-1',                   title: 'Coming Soon',                         cat: 'Événementiel',            color: 'var(--event)' },
+    'vignette 9': { id: 'bientot-2',                   title: 'Coming Soon',                         cat: 'Voiture & Moto',          color: 'var(--auto)' },
   };
-  const MAX_PHOTOS = 60;
+  const SLUG_BY_ID = Object.fromEntries(PROJECT_ORDER.map(slug => [PROJECTS[slug].id, slug]));
+  const baseDir = slug => `images/projets/${encodeURIComponent(slug)}`;
+  const BASE_TITLE = document.title;
 
+  // ===== Mosaïque d'accueil : vignettes légères, chaque cadre est un vrai lien (#id) =====
   const sheet = document.getElementById('sheet');
+  let cameFromClick = false; // vrai si la galerie a été ouverte par un clic dans la page
+
   PROJECT_ORDER.forEach((slug, i) => {
     const p = PROJECTS[slug];
-    const encoded = encodeURIComponent(slug);
-    const frame = document.createElement('div');
+    const frame = document.createElement('a');
     frame.className = 'frame';
-    frame.dataset.slug = slug;
+    frame.href = `#${p.id}`;
+    frame.setAttribute('aria-label', `${p.title} — voir la série`);
     frame.innerHTML = `
       <span class="fnum mono">N°${String(i + 1).padStart(2, '0')}</span>
       <span class="fdot" style="background:${p.color}"></span>
-      <img src="images/projets/${encoded}/1.jpg" loading="lazy" decoding="async" alt="${p.title}"
-           onerror="this.onerror=null; this.src='images/projets/${encoded}/thumbs/1.jpg';">
+      <img src="${baseDir(slug)}/thumbs/1.webp" ${i < 3 ? '' : 'loading="lazy"'} decoding="async" alt="${p.title}">
       <div class="caption"><h3>${p.title}</h3><span class="cat mono">${p.cat}</span></div>`;
-    frame.addEventListener('click', () => openProject(slug));
+    frame.addEventListener('click', () => { cameFromClick = true; });
     sheet.appendChild(frame);
   });
 
-  // ===== Galerie mosaïque (au clic sur une vignette) =====
+  // ===== Galerie mosaïque (adresse : projets.html#<id>) =====
   const galleryModal = document.getElementById('galleryModal');
   const gmTitle = document.getElementById('gmTitle');
   const gmCat = document.getElementById('gmCat');
@@ -245,47 +250,86 @@
   const masonry = document.getElementById('masonry');
   const gmEmpty = document.getElementById('gmEmpty');
 
-  function probe(src) {
-    return new Promise(resolve => {
-      const img = new Image();
-      img.onload = () => resolve(src);
-      img.onerror = () => resolve(null);
-      img.src = src;
-    });
+  // Liste des photos de chaque projet (fichier images/photos.json), chargée une seule fois
+  let manifestPromise = null;
+  function loadManifest() {
+    if (!manifestPromise) {
+      manifestPromise = fetch('images/photos.json')
+        .then(r => (r.ok ? r.json() : {}))
+        .catch(() => ({}))
+        .then(m => { if (!Object.keys(m).length) manifestPromise = null; return m; });
+    }
+    return manifestPromise;
   }
+
+  let currentSlug = null;
+  let openToken = 0;
 
   async function openProject(slug) {
     const p = PROJECTS[slug];
-    const encoded = encodeURIComponent(slug);
+    const base = baseDir(slug);
+    const token = ++openToken;
+    currentSlug = slug;
     gmTitle.textContent = p.title;
     gmCat.textContent = p.cat;
+    document.title = `${p.title} — Ethan_photographie`;
     masonry.innerHTML = '';
     gmEmpty.style.display = 'none';
+    galleryModal.scrollTop = 0;
     galleryModal.classList.add('active');
 
-    const candidates = Array.from({ length: MAX_PHOTOS }, (_, i) => i + 1);
-    const results = await Promise.all(candidates.map(n => probe(`images/projets/${encoded}/${n}.jpg`)));
-    let valid = results.filter(Boolean);
-    if (valid.length === 0) {
-      const thumbResults = await Promise.all(candidates.map(n => probe(`images/projets/${encoded}/thumbs/${n}.jpg`)));
-      valid = thumbResults.filter(Boolean);
-    }
-    if (valid.length === 0) {
+    const manifest = await loadManifest();
+    if (token !== openToken) return; // la galerie a été fermée ou changée entre-temps
+    const photos = manifest[slug] || [];
+    if (photos.length === 0) {
       gmEmpty.style.display = 'block';
       return;
     }
-    currentImages = valid;
-    valid.forEach((src, i) => {
+    currentImages = photos.map(ph => `${base}/web/${ph.n}.webp`);
+    photos.forEach((ph, i) => {
       const item = document.createElement('div');
       item.className = 'm-item';
-      item.innerHTML = `<img src="${src}" loading="lazy" decoding="async" alt="${p.title} — photo ${i + 1}">`;
+      item.innerHTML = `<img src="${base}/thumbs/${ph.n}.webp" width="${ph.w}" height="${ph.h}" loading="lazy" decoding="async" alt="${p.title} — photo ${i + 1}">`;
       item.addEventListener('click', () => openLightbox(i, p.title));
       masonry.appendChild(item);
     });
   }
 
-  gmClose.addEventListener('click', () => galleryModal.classList.remove('active'));
-  galleryModal.addEventListener('click', (e) => { if (e.target === galleryModal) galleryModal.classList.remove('active'); });
+  // Ferme l'affichage de la galerie (sans toucher à l'adresse)
+  function hideGallery() {
+    openToken++;
+    currentSlug = null;
+    cameFromClick = false;
+    closeLightbox();
+    galleryModal.classList.remove('active');
+    document.title = BASE_TITLE;
+  }
+
+  // Fermeture demandée par l'utilisateur : on revient à l'adresse sans #id
+  function closeGallery() {
+    if (!galleryModal.classList.contains('active')) return;
+    if (cameFromClick) {
+      history.back(); // l'événement popstate masque la galerie
+    } else {
+      history.replaceState(null, '', location.pathname + location.search);
+      hideGallery();
+    }
+  }
+
+  // L'adresse décide de ce qui est affiché : #id ouvre la galerie, pas de #id la ferme
+  function syncFromHash() {
+    const slug = SLUG_BY_ID[decodeURIComponent(location.hash.slice(1))];
+    if (slug) {
+      if (slug !== currentSlug) openProject(slug);
+    } else if (galleryModal.classList.contains('active')) {
+      hideGallery();
+    }
+  }
+  window.addEventListener('popstate', syncFromHash);
+  window.addEventListener('hashchange', syncFromHash);
+
+  gmClose.addEventListener('click', closeGallery);
+  galleryModal.addEventListener('click', (e) => { if (e.target === galleryModal) closeGallery(); });
 
   // ===== Visionneuse plein écran (zoom sur une photo de la mosaïque) =====
   const lightbox = document.getElementById('lightbox');
@@ -303,7 +347,12 @@
   }
   function updateLightbox() {
     lbImg.src = currentImages[currentIndex];
+    lbImg.alt = `${lbTitle.textContent} — photo ${currentIndex + 1}`;
     lbCount.textContent = `${currentIndex + 1} / ${currentImages.length}`;
+    // Précharge la photo suivante et la précédente pour un défilement fluide
+    [1, -1].forEach(d => {
+      new Image().src = currentImages[(currentIndex + d + currentImages.length) % currentImages.length];
+    });
   }
   function closeLightbox() { lightbox.classList.remove('active'); }
   function nextImage() { currentIndex = (currentIndex + 1) % currentImages.length; updateLightbox(); }
@@ -319,7 +368,7 @@
       if (e.key === 'ArrowRight') nextImage();
       if (e.key === 'ArrowLeft') prevImage();
     } else if (e.key === 'Escape' && galleryModal.classList.contains('active')) {
-      galleryModal.classList.remove('active');
+      closeGallery();
     }
   });
 
@@ -334,6 +383,9 @@
     mobileNav.classList.remove('open');
     menuToggle.textContent = '☰';
   }));
+
+  // Lien direct vers une galerie (projets.html#4l-trophy-2026)
+  syncFromHash();
 </script>
 
 </body>
