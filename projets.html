@@ -4,8 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Projets — Ethan_photographie</title>
+<meta name="description" content="Mosaïque des projets photo d'Ethan_photographie : voitures, motos et événements. Cliquez sur un cadre pour voir la série entière.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%2316130F'/%3E%3Ctext x='32' y='46' font-family='Arial Black,Arial,sans-serif' font-size='40' text-anchor='middle' fill='%23F4F1E8'%3EE%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Caveat:wght@600;700&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Caveat:wght@600;700&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Caveat:wght@600;700&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap"></noscript>
 <style>
   :root{
     --paper:#F4F1E8; --paper-2:#EAE4D3; --ink:#16130F; --ink-soft:#5C574A;
@@ -65,10 +69,10 @@
   .frame .caption{
     position:absolute; left:0; right:0; bottom:0; padding:14px; z-index:2;
     background:linear-gradient(0deg, rgba(22,19,15,0.85) 0%, rgba(22,19,15,0) 100%);
-    opacity:0; transform:translateY(6px); transition:all .3s ease;
+    opacity:0; transform:translateY(6px); transition:opacity .3s ease, transform .3s ease;
   }
   .frame:hover .caption{opacity:1; transform:translateY(0);}
-  .caption h3{font-family:'Archivo Black'; font-size:0.85rem; text-transform:uppercase; color:var(--paper); margin-bottom:2px;}
+  .caption h2{font-family:'Archivo Black'; font-size:0.85rem; text-transform:uppercase; color:var(--paper); margin-bottom:2px;}
   .caption .cat{font-family:'Space Mono'; font-size:0.66rem; color:var(--paper); opacity:0.8;}
 
   footer{padding:30px 0; text-align:center; font-family:'Space Mono'; font-size:0.72rem; color:var(--ink-soft); border-top:1px solid rgba(22,19,15,0.12);}
@@ -152,6 +156,7 @@
 
 <div class="page-spacer"></div>
 
+<main>
 <div class="wrap">
   <div class="intro">
     <div>
@@ -167,8 +172,64 @@
     </div>
   </div>
 
-  <div class="sheet" id="sheet"></div>
+  <div class="sheet" id="sheet">
+    <a class="frame" href="#rallye-du-pyla-2026" data-slug="vignette 1" data-id="rallye-du-pyla-2026" data-title="Rallye du Pyla 2026" data-cat="Voiture &amp; Moto">
+      <span class="fnum mono">N°01</span>
+      <span class="fdot" style="background:var(--auto)"></span>
+      <img src="images/projets/vignette%201/thumbs/1.webp" srcset="images/projets/vignette%201/thumbs/1-s.webp 440w, images/projets/vignette%201/thumbs/1.webp 601w" sizes="(max-width:560px) 100vw, (max-width:860px) 50vw, 376px" width="601" height="900" alt="" fetchpriority="high" decoding="async">
+      <div class="caption"><h2>Rallye du Pyla 2026</h2><span class="cat mono">Voiture &amp; Moto</span></div>
+    </a>
+    <a class="frame" href="#shooting" data-slug="vignette 2" data-id="shooting" data-title="Shooting" data-cat="Voiture &amp; Portrait">
+      <span class="fnum mono">N°02</span>
+      <span class="fdot" style="background:var(--portrait)"></span>
+      <img src="images/projets/vignette%202/thumbs/1.webp" srcset="images/projets/vignette%202/thumbs/1-s.webp 440w, images/projets/vignette%202/thumbs/1.webp 600w" sizes="(max-width:560px) 100vw, (max-width:860px) 50vw, 376px" width="600" height="900" alt="" decoding="async">
+      <div class="caption"><h2>Shooting</h2><span class="cat mono">Voiture &amp; Portrait</span></div>
+    </a>
+    <a class="frame" href="#4l-trophy-2026" data-slug="vignette 3" data-id="4l-trophy-2026" data-title="4L Trophy 2026" data-cat="Voiture">
+      <span class="fnum mono">N°03</span>
+      <span class="fdot" style="background:var(--auto)"></span>
+      <img src="images/projets/vignette%203/thumbs/1.webp" srcset="images/projets/vignette%203/thumbs/1-s.webp 440w, images/projets/vignette%203/thumbs/1.webp 600w" sizes="(max-width:560px) 100vw, (max-width:860px) 50vw, 376px" width="600" height="900" alt="" decoding="async">
+      <div class="caption"><h2>4L Trophy 2026</h2><span class="cat mono">Voiture</span></div>
+    </a>
+    <a class="frame" href="#kmc-auto-prestige-event" data-slug="vignette 4" data-id="kmc-auto-prestige-event" data-title="KMC Auto Prestige Event" data-cat="Voiture &amp; Événementiel">
+      <span class="fnum mono">N°04</span>
+      <span class="fdot" style="background:var(--event)"></span>
+      <img src="images/projets/vignette%204/thumbs/1.webp" srcset="images/projets/vignette%204/thumbs/1-s.webp 550w, images/projets/vignette%204/thumbs/1.webp 900w" sizes="(max-width:560px) 100vw, (max-width:860px) 50vw, 376px" width="900" height="900" alt="" loading="lazy" decoding="async">
+      <div class="caption"><h2>KMC Auto Prestige Event</h2><span class="cat mono">Voiture &amp; Événementiel</span></div>
+    </a>
+    <a class="frame" href="#ferrari-palau-bordeaux" data-slug="vignette 5" data-id="ferrari-palau-bordeaux" data-title="Ferrari Palau Bordeaux" data-cat="Voiture">
+      <span class="fnum mono">N°05</span>
+      <span class="fdot" style="background:var(--auto)"></span>
+      <img src="images/projets/vignette%205/thumbs/1.webp" srcset="images/projets/vignette%205/thumbs/1-s.webp 440w, images/projets/vignette%205/thumbs/1.webp 600w" sizes="(max-width:560px) 100vw, (max-width:860px) 50vw, 376px" width="600" height="900" alt="" loading="lazy" decoding="async">
+      <div class="caption"><h2>Ferrari Palau Bordeaux</h2><span class="cat mono">Voiture</span></div>
+    </a>
+    <a class="frame" href="#bmw-merignac" data-slug="vignette 6" data-id="bmw-merignac" data-title="BMW Mérignac" data-cat="Voiture &amp; Moto">
+      <span class="fnum mono">N°06</span>
+      <span class="fdot" style="background:var(--auto)"></span>
+      <img src="images/projets/vignette%206/thumbs/1.webp" srcset="images/projets/vignette%206/thumbs/1-s.webp 440w, images/projets/vignette%206/thumbs/1.webp 600w" sizes="(max-width:560px) 100vw, (max-width:860px) 50vw, 376px" width="600" height="900" alt="" loading="lazy" decoding="async">
+      <div class="caption"><h2>BMW Mérignac</h2><span class="cat mono">Voiture &amp; Moto</span></div>
+    </a>
+    <a class="frame" href="#calandres-d-antan-gradignan" data-slug="vignette 7" data-id="calandres-d-antan-gradignan" data-title="Les Calandres d&#x27;Antan de Gradignan" data-cat="Voiture">
+      <span class="fnum mono">N°07</span>
+      <span class="fdot" style="background:var(--auto)"></span>
+      <img src="images/projets/vignette%207/thumbs/1.webp" srcset="images/projets/vignette%207/thumbs/1-s.webp 440w, images/projets/vignette%207/thumbs/1.webp 600w" sizes="(max-width:560px) 100vw, (max-width:860px) 50vw, 376px" width="600" height="900" alt="" loading="lazy" decoding="async">
+      <div class="caption"><h2>Les Calandres d&#x27;Antan de Gradignan</h2><span class="cat mono">Voiture</span></div>
+    </a>
+    <a class="frame" href="#bientot-1" data-slug="vignette 8" data-id="bientot-1" data-title="Coming Soon" data-cat="Événementiel">
+      <span class="fnum mono">N°08</span>
+      <span class="fdot" style="background:var(--event)"></span>
+      <img src="images/projets/vignette%208/thumbs/1.webp" srcset="images/projets/vignette%208/thumbs/1-s.webp 440w, images/projets/vignette%208/thumbs/1.webp 600w" sizes="(max-width:560px) 100vw, (max-width:860px) 50vw, 376px" width="600" height="900" alt="" loading="lazy" decoding="async">
+      <div class="caption"><h2>Coming Soon</h2><span class="cat mono">Événementiel</span></div>
+    </a>
+    <a class="frame" href="#bientot-2" data-slug="vignette 9" data-id="bientot-2" data-title="Coming Soon" data-cat="Voiture &amp; Moto">
+      <span class="fnum mono">N°09</span>
+      <span class="fdot" style="background:var(--auto)"></span>
+      <img src="images/projets/vignette%209/thumbs/1.webp" srcset="images/projets/vignette%209/thumbs/1-s.webp 440w, images/projets/vignette%209/thumbs/1.webp 600w" sizes="(max-width:560px) 100vw, (max-width:860px) 50vw, 376px" width="600" height="900" alt="" loading="lazy" decoding="async">
+      <div class="caption"><h2>Coming Soon</h2><span class="cat mono">Voiture &amp; Moto</span></div>
+    </a>
+  </div>
 </div>
+</main>
 
 <footer>© 2026 Ethan_photographie — Tous droits réservés</footer>
 
@@ -202,45 +263,23 @@
 </div>
 
 <script>
-  // ===== Données des projets =====
-  // Pour ajouter un projet : nouvelle entrée ici (clé = nom du dossier, id = fin de l'adresse
-  // de la galerie, sans espaces ni accents), déposez ses photos dans images/projets/<dossier>/1.jpg, 2.jpg, ...
-  // puis lancez : python3 outils/optimiser_images.py
-  // (le script crée les versions légères et met à jour images/photos.json)
-  const PROJECT_ORDER = ['vignette 1','vignette 2','vignette 3','vignette 4','vignette 5','vignette 6','vignette 7','vignette 8','vignette 9'];
-  const PROJECTS = {
-    'vignette 1': { id: 'rallye-du-pyla-2026',         title: 'Rallye du Pyla 2026',                 cat: 'Voiture & Moto',          color: 'var(--auto)' },
-    'vignette 2': { id: 'shooting',                    title: "Shooting",                            cat: 'Voiture & Portrait',      color: 'var(--portrait)' },
-    'vignette 3': { id: '4l-trophy-2026',              title: '4L Trophy 2026',                      cat: 'Voiture',                 color: 'var(--auto)' },
-    'vignette 4': { id: 'kmc-auto-prestige-event',     title: 'KMC Auto Prestige Event',             cat: 'Voiture & Événementiel',  color: 'var(--event)' },
-    'vignette 5': { id: 'ferrari-palau-bordeaux',      title: 'Ferrari Palau Bordeaux',              cat: 'Voiture',                 color: 'var(--auto)' },
-    'vignette 6': { id: 'bmw-merignac',                title: 'BMW Mérignac',                        cat: 'Voiture & Moto',          color: 'var(--auto)' },
-    'vignette 7': { id: 'calandres-d-antan-gradignan', title: "Les Calandres d'Antan de Gradignan",  cat: 'Voiture',                 color: 'var(--auto)' },
-    'vignette 8': { id: 'bientot-1',                   title: 'Coming Soon',                         cat: 'Événementiel',            color: 'var(--event)' },
-    'vignette 9': { id: 'bientot-2',                   title: 'Coming Soon',                         cat: 'Voiture & Moto',          color: 'var(--auto)' },
-  };
+  // ===== Projets : lus depuis la mosaïque (le HTML est la seule source) =====
+  // Pour ajouter un projet : copiez un bloc <a class="frame"> dans la mosaïque (data-slug = nom du dossier
+  // d'images, data-id = fin de l'adresse de la galerie, sans espaces ni accents), déposez ses photos dans
+  // images/projets/<dossier>/1.jpg, 2.jpg, ... puis lancez : python3 outils/optimiser_images.py
+  // (le script crée les versions légères, met à jour images/photos.json et donne les largeurs du srcset)
+  const PROJECT_ORDER = [];
+  const PROJECTS = {};
+  let cameFromClick = false; // vrai si la galerie a été ouverte par un clic dans la page
+  document.querySelectorAll('#sheet .frame').forEach(frame => {
+    const slug = frame.dataset.slug;
+    PROJECT_ORDER.push(slug);
+    PROJECTS[slug] = { id: frame.dataset.id, title: frame.dataset.title, cat: frame.dataset.cat };
+    frame.addEventListener('click', () => { cameFromClick = true; });
+  });
   const SLUG_BY_ID = Object.fromEntries(PROJECT_ORDER.map(slug => [PROJECTS[slug].id, slug]));
   const baseDir = slug => `images/projets/${encodeURIComponent(slug)}`;
   const BASE_TITLE = document.title;
-
-  // ===== Mosaïque d'accueil : vignettes légères, chaque cadre est un vrai lien (#id) =====
-  const sheet = document.getElementById('sheet');
-  let cameFromClick = false; // vrai si la galerie a été ouverte par un clic dans la page
-
-  PROJECT_ORDER.forEach((slug, i) => {
-    const p = PROJECTS[slug];
-    const frame = document.createElement('a');
-    frame.className = 'frame';
-    frame.href = `#${p.id}`;
-    frame.setAttribute('aria-label', `${p.title} — voir la série`);
-    frame.innerHTML = `
-      <span class="fnum mono">N°${String(i + 1).padStart(2, '0')}</span>
-      <span class="fdot" style="background:${p.color}"></span>
-      <img src="${baseDir(slug)}/thumbs/1.webp" ${i < 3 ? '' : 'loading="lazy"'} decoding="async" alt="${p.title}">
-      <div class="caption"><h3>${p.title}</h3><span class="cat mono">${p.cat}</span></div>`;
-    frame.addEventListener('click', () => { cameFromClick = true; });
-    sheet.appendChild(frame);
-  });
 
   // ===== Galerie mosaïque (adresse : projets.html#<id>) =====
   const galleryModal = document.getElementById('galleryModal');

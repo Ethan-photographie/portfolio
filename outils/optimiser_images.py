@@ -4,6 +4,7 @@
 Pour chaque photo images/projets/<projet>/N.jpg, crée :
   - thumbs/N.webp : vignette légère (mosaïque et galerie)
   - web/N.webp    : version d'affichage (visionneuse plein écran)
+  - thumbs/1-s.webp : couverture allégée pour la mosaïque (utilisée dans le srcset)
 Les originaux ne sont jamais modifiés.
 
 Génère aussi images/photos.json (liste des photos de chaque projet, avec les
@@ -51,6 +52,22 @@ def redimensionner(source: Path, cible: Path, cote_long: int, qualite: int):
         return im.size
 
 
+COUV_BOITE = (440, 550)  # cadre 4:5 de la mosaïque, avec ~10 % de marge
+COUV_QUALITE = 70
+
+
+def redimensionner_couverture(source: Path, cible: Path):
+    """Couverture allégée : l'image entière, juste assez grande pour remplir le cadre 4:5."""
+    with Image.open(source) as im:
+        icc = im.info.get("icc_profile")
+        im.draft("RGB", COUV_BOITE)
+        im = ImageOps.exif_transpose(im).convert("RGB")
+        w, h = im.size
+        echelle = min(1.0, max(COUV_BOITE[0] / w, COUV_BOITE[1] / h))
+        im = im.resize((round(w * echelle), round(h * echelle)), Image.LANCZOS)
+        im.save(cible, "WEBP", quality=COUV_QUALITE, method=5, icc_profile=icc)
+
+
 def traiter(source: Path):
     dossier = source.parent
     n = int(source.stem)
@@ -60,6 +77,10 @@ def traiter(source: Path):
         redimensionner(source, thumb, THUMB_COTE_LONG, THUMB_QUALITE)
     if not a_jour(source, web):
         redimensionner(source, web, WEB_COTE_LONG, WEB_QUALITE)
+    if n == 1:
+        couv = dossier / "thumbs" / "1-s.webp"
+        if not a_jour(source, couv):
+            redimensionner_couverture(source, couv)
     with Image.open(thumb) as t:
         w, h = t.size
     return dossier.name, n, w, h
@@ -97,6 +118,12 @@ def main():
                 im.save(cible, "WEBP", quality=FOND_QUALITE, method=5, icc_profile=icc)
 
     print(f"{len(sources)} photos traitées dans {len(photos)} projets.")
+    print("Largeurs des couvertures (pour le srcset de la mosaïque dans projets.html) :")
+    for projet in sorted(photos):
+        petite = PROJETS / projet / "thumbs" / "1-s.webp"
+        if petite.exists():
+            with Image.open(petite) as t:
+                print(f"  {projet}: thumbs/1-s.webp {t.width}w, thumbs/1.webp {photos[projet][0]['w']}w")
 
 
 if __name__ == "__main__":
